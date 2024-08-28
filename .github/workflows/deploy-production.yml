@@ -28,7 +28,7 @@ jobs:
       - name: Export gcloud related env variable
         run: export CLOUDSDK_PYTHON="/usr/bin/python3"
 
-      - uses: google-github-actions/setup-gcloud@v0
+      - uses: google-github-actions/setup-gcloud@v2
         with:
           version: '286.0.0'
           service_account_email: ${{ secrets.RUN_SA_EMAIL_PRODUCTION}}

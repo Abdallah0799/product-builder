@@ -57,7 +57,7 @@ jobs:
             --image "gcr.io/$PROJECT_ID/$PROJECT_NAME-${GITHUB_REF##*/}:$GITHUB_SHA" \
             --platform "managed" \
             --cpu 0.25 \
-            --memory 128 MiB \
+            --memory "128MiB" \
             --timeout 1m \
             --allow-unauthenticated \
             --set-env-vars "ENVIRONMENT=PRODUCTION" \

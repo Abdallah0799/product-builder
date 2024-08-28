@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # Setup gcloud CLI
+      # Setup gcloud CLI 
       - name: Setup python
         uses: actions/setup-python@v4
         with:

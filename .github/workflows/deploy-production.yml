@@ -47,12 +47,11 @@ jobs:
         run: |-
           gcloud run deploy "$PROJECT_NAME-${GITHUB_REF##*/}" \
             --region "$RUN_REGION" \
-            --quiet \
             --image "gcr.io/$PROJECT_ID/$PROJECT_NAME-${GITHUB_REF##*/}:$GITHUB_SHA" \
             --platform "managed" \
-            --memory "8192Mi" \
-            --cpu 2 \
-            --timeout 30m30s \
+            --cpu 0.25 \
+            --memory 128 MiB \
+            --timeout 1m \
             --allow-unauthenticated \
             --set-env-vars "ENVIRONMENT=PRODUCTION" \
             --set-env-vars "OPENAI_API_KEY=$OPENAI_API_KEY" \

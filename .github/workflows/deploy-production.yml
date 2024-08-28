@@ -29,11 +29,17 @@ jobs:
       - name: Export gcloud related env variable
         run: export CLOUDSDK_PYTHON="/usr/bin/python3"
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Google Auth
+        id: 'auth'
+        uses: 'google-github-actions/auth@v2'
         with:
-          version: '390.0.0'
-          project_id: ${{ secrets.RUN_PROJECT_PRODUCTION}}
-          service_account_key: ${{ secrets.RUN_SA_KEY_PRODUCTION }}
+          credentials_json: '${{ secrets.RUN_SA_KEY_PRODUCTION }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
 
 
       # Build and push image to Google Container Registry

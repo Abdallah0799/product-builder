@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  PROJECT_ID: ${{ secrets.RUN_PROJECT_PRODUCTION}}
+  PROJECT_ID: mycenter-425712
   RUN_REGION: us-central1
   PROJECT_NAME: product-builder
 

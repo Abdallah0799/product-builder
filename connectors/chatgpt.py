@@ -1,7 +1,7 @@
 from openai import OpenAI
 from typing import List
 
-# test
+
 class ChatGPTConnector:
 
     def __init__(self) -> None:

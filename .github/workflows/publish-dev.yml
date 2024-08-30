@@ -16,4 +16,6 @@ jobs:
     - name: Install Env
       run: pip install pipenv && pipenv install
     - name: Run Test
+      env:
+        PYTHONPATH: ./
       run: cd ./tests && pipenv run python -m unittest basic.py

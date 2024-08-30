@@ -8,16 +8,12 @@ You can generate a new product by clicking on this [endpoint](https://product-bu
 
 Here is the format of a response:
 
+```json
 {
   "category": "Pants",
-  
   "created_at": "Fri, 30 Aug 2024 17:32:57 GMT",
-  
   "gender": "F",
-  
   "title": "Court Queen Performance Joggers",
-  
   "unit_amount": 150,
-  
   "updated_at": "Fri, 30 Aug 2024 17:32:57 GMT"
 }

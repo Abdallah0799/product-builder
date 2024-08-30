@@ -9,9 +9,14 @@ app.config["JSONIFY_PRETTYPRINT_REGULAR"] = False
 
 @app.route("/get_new_product", methods=["GET"])
 def get_new_product():
-    product = run()
-    return jsonify(product)
+    try:
+        product = run()
+        return jsonify(product)
+    except Exception as e:
+        return jsonify({
+            "Error": str(e)
+        })
 
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    app.run(debug=False, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))

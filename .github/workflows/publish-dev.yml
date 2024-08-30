@@ -1,0 +1,19 @@
+name: Push to dev
+
+on:
+  push:
+    branches:
+      - "dev"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+    - name: Install Env
+      run: pip install pipenv && pipenv install
+    - name: Run Test
+      run: cd ./tests && pipenv run python -m unittest basic.py

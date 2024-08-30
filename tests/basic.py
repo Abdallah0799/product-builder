@@ -16,6 +16,7 @@ class ConnectorsTest(unittest.TestCase):
 
     def test_s3_data_fetch(self):
         res = s3_connector.fetch_data("products", settings.S3_FETCH_WINDOW)
+        raise Exception
 
     def test_run(self):
         res = run()

@@ -3,10 +3,6 @@ import datetime
 from connectors.s3 import S3Connector
 from connectors.chatgpt import ChatGPTConnector
 
-# Init external connections
-chatgptconn = ChatGPTConnector()
-s3conn = S3Connector("fictive-company")
-
 # Set product features
 genders = {"men": "M", "women": "F"}
 categories = ["T-shirt", "Pants"]
@@ -30,6 +26,10 @@ response_format = {
 
 
 def run() -> dict:
+
+    # Init external connections
+    chatgptconn = ChatGPTConnector()
+    s3conn = S3Connector("fictive-company")
 
     # Get exsiting products
     products = s3conn.fetch_data("products", 360)

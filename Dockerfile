@@ -17,4 +17,4 @@ COPY . ./
 # Install production dependencies.
 RUN pipenv sync
 
-CMD pipenv run gunicorn --bind :$PORT --workers 8 --threads 8 run:app
+CMD pipenv run gunicorn -w 4 -b 0.0.0.0:8000 run:app

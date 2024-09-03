@@ -53,6 +53,7 @@ jobs:
       - name: Deploy API
         run: |-
           gcloud run deploy "$PROJECT_NAME-${GITHUB_REF##*/}" \
+            --quiet \
             --region "$RUN_REGION" \
             --image "gcr.io/$PROJECT_ID/$PROJECT_NAME-${GITHUB_REF##*/}:$GITHUB_SHA" \
             --platform "managed" \

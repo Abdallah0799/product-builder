@@ -17,4 +17,4 @@ COPY . ./
 # Install production dependencies.
 RUN pipenv sync
 
-CMD pipenv run gunicorn -w 4 -b $PORT run:app
+CMD pipenv run gunicorn -w 2 -b $PORT run:app

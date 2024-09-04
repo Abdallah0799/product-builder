@@ -17,7 +17,7 @@ limiter = Limiter(
 
 
 @app.route("/get_new_product", methods=["GET"])
-@limiter.limit("5 per minute")  # Limit this specific route to 10 requests per minute
+@limiter.limit("20 per hour")  # Limit this specific route to 10 requests per minute
 def get_new_product():
     try:
         product = run()

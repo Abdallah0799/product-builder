@@ -59,7 +59,7 @@ jobs:
             --platform "managed" \
             --cpu 1 \
             --memory "256Mi" \
-            --cpu-throttling
+            --cpu-throttling \
             --timeout 1m \
             --allow-unauthenticated \
             --set-env-vars "ENVIRONMENT=PRODUCTION" \

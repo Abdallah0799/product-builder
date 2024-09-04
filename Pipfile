@@ -12,6 +12,7 @@ pydantic = "*"
 awswrangler = "*"
 requests = "*"
 gunicorn = "*"
+flask-limiter = "*"
 
 [dev-packages]
 ipykernel = "*"

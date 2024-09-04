@@ -10,9 +10,7 @@ app.config["JSONIFY_PRETTYPRINT_REGULAR"] = False
 @app.route("/get_new_product", methods=["GET"])
 def get_new_product():
     try:
-        print("request start 🟢")
         product = run()
-        print("request finish 🔴")
         return jsonify(product)
     except Exception as e:
         return jsonify({

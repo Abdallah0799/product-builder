@@ -58,7 +58,7 @@ jobs:
             --image "gcr.io/$PROJECT_ID/$PROJECT_NAME-${GITHUB_REF##*/}:$GITHUB_SHA" \
             --platform "managed" \
             --cpu 1 \
-            --memory "256Mi" \
+            --memory "512Mi" \
             --no-cpu-throttling \
             --timeout 1m \
             --allow-unauthenticated \

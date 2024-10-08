@@ -22,8 +22,7 @@ env:
   ECS_TASK_DEFINITION: product-builder 
   ECS_TASK_DEFINITION_FILE: task-definition.json
   CONTAINER_NAME: product-builder
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}   
-  IMAGE_TAG: latest               
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}         
 
 jobs:
   deploy:
@@ -46,19 +45,18 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
-      # Build the Docker image and tag it
-      - name: Build Docker image
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: latest
         run: |
-          # Tag the image with the latest version
-          IMAGE_TAG=latest
-          # Build the image
-          docker build -t ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
-
-      # Push the Docker image to Amazon ECR
-      - name: Push Docker image to ECR
-        run: |
-          IMAGE_TAG=latest
-          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       # Update the ECS service to use the new image
       - name: Deploy to Amazon ECS

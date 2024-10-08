@@ -22,7 +22,8 @@ env:
   ECS_TASK_DEFINITION: product-builder 
   ECS_TASK_DEFINITION_FILE: task-definition.json
   CONTAINER_NAME: product-builder
-  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}                  
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}   
+  IMAGE_TAG: latest               
 
 jobs:
   deploy:
@@ -51,24 +52,23 @@ jobs:
           # Tag the image with the latest version
           IMAGE_TAG=latest
           # Build the image
-          docker build -t ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG .
+          docker build -t ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
 
       # Push the Docker image to Amazon ECR
       - name: Push Docker image to ECR
         run: |
           IMAGE_TAG=latest
-          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
 
       # Update the ECS service to use the new image
       - name: Deploy to Amazon ECS
         run: |
           # Set environment variables
-          IMAGE_TAG=latest
 
           # Register the new task definition with the updated image
           TASK_FAMILY=$(aws ecs describe-services --cluster ${{ env.ECS_CLUSTER }} --services ${{ env.ECS_SERVICE }} --query "services[0].taskDefinition" --output text | cut -d'/' -f2 | cut -d':' -f1)
           TASK_DEFINITION_JSON=$(aws ecs describe-task-definition --task-definition $TASK_FAMILY)
-          NEW_TASK_DEFINITION=$(echo $TASK_DEFINITION_JSON | jq --arg IMAGE "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG" '.taskDefinition | .containerDefinitions[0].image=$IMAGE | del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities)')
+          NEW_TASK_DEFINITION=$(echo $TASK_DEFINITION_JSON | jq --arg IMAGE "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}" '.taskDefinition | .containerDefinitions[0].image=$IMAGE | del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities)')
 
           # Register the new task definition with the updated image
           aws ecs register-task-definition --cli-input-json "$NEW_TASK_DEFINITION"

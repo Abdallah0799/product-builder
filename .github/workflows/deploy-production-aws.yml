@@ -54,9 +54,9 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/{{ env.CONTAINER_NAME }} .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/{{ env.CONTAINER_NAME }}
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY/{{ env.CONTAINER_NAME }}" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:{{ env.CONTAINER_NAME }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:{{ env.CONTAINER_NAME }}
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:{{ env.CONTAINER_NAME }}" >> $GITHUB_OUTPUT
 
       - name: Download task definition
         run: |

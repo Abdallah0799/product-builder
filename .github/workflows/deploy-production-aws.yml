@@ -19,8 +19,9 @@ env:
   ECR_REPOSITORY: main_repo           # set this to your Amazon ECR repository name
   ECS_SERVICE: myfirstservice                 # set this to your Amazon ECS service name
   ECS_CLUSTER: myfirstcluster                 # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: product-builder:1 # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: product-builder # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
+  ECS_TASK_DEFINITION_FILE: task-definition.json
   CONTAINER_NAME: product-builder           # set this to the name of the container in the
                                                # containerDefinitions section of your task definition
 
@@ -53,15 +54,20 @@ jobs:
           # Build a docker container and
           # push it to ECR so that it can
           # be deployed to ECS.
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY" >> $GITHUB_OUTPUT
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/{{ env.CONTAINER_NAME }} .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY/{{ env.CONTAINER_NAME }}
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY/{{ env.CONTAINER_NAME }}" >> $GITHUB_OUTPUT
 
+      - name: Download task definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_DEFINITION }} \
+          --query taskDefinition > task-definition.json
+      
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: ${{ env.ECS_TASK_DEFINITION_FILE }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
